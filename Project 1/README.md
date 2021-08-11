@@ -70,24 +70,24 @@ line (actually, I never check for the second slash, so technically they start
 with /).
 
 There are two debugging "instructions" available to you:
-
+```
   PRNT reg
-
+```
 will print the contents of reg.
-
+```
   DUMP
-
+```
 will print a complete core dump, including all registers, and display the
 program code with an arrow (-->) indicating the line where the dump was
 produced.  This arrow is not particularly useful when you explicitly DUMP,
 but it is useful when the emulator generates a core dump for you (below).
-
+```
   PRNL
-
+```
 will print a blank line.
-
+```
   HALT
-
+```
 will terminate the simulation.
 
 Unlike a real computer, the emulator will start up with all registers and
