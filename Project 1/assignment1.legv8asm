@@ -1,0 +1,144 @@
+    B main
+
+    main:
+        //OUTPUT REGISTERS
+        //X6 is length of our array
+        //X7 is final output array
+
+        //Saved Registers used and their purpose
+        //X20 is length of the array
+        //X21 is selectionSort current index
+        //X22 is findSmallest current index
+        //X23 is findSmallest return index
+        //X24 is selectionSort return address
+
+        //Array is stored in X19, one of the saved Registers
+        //Array size of 10
+        
+
+        SUBI SP, SP, #80    //Make space for 10 integers
+        ADD X9, SP, XZR     //temporarily remember where the array is
+        
+        SUBI SP, SP, #48    //Remember the original values of the saved registers used
+        STUR X19, [SP, #0]
+        STUR X20, [SP, #8]
+        STUR X21, [SP, #16]
+        STUR X22, [SP, #24]
+        STUR X23, [SP, #32]
+        STUR X24, [SP, #40]
+
+        ADD X19, X9, XZR    //Assign X19 to the our Array
+        ADDI X20, XZR, #10  //Assign our length of our Array
+
+        BL fill             //fill our array
+
+        BL selectionSort
+
+        DUMP
+
+        ADD X6, X20, XZR    //store our length of the array into a result register
+        ADD X7, X19, XZR    //store our finalized array as a result
+
+        LDUR X19, [SP, #0]  //restore our Saved Registers we used to their original values
+        LDUR X20, [SP, #8]
+        LDUR X21, [SP, #16]
+        LDUR X22, [SP, #24]
+        LDUR X23, [SP, #32]
+        LDUR X24, [SP, #40]
+        ADDI SP, SP, #48     //Move the stack pointer back to it's original spot right after array creation
+
+        B end
+    fill:
+        //Array [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+        ADDI X9, XZR, #10
+        STUR X9, [X19, #0]
+
+        ADDI X9, XZR, #9
+        STUR X9, [X19, #8]
+
+        ADDI X9, XZR, #8
+        STUR X9, [X19, #16]
+
+        ADDI X9, XZR, #7
+        STUR X9, [X19, #24]
+
+        ADDI X9, XZR, #6
+        STUR X9, [X19, #32]
+
+        ADDI X9, XZR, #5
+        STUR X9, [X19, #40]
+
+        ADDI X9, XZR, #4
+        STUR X9, [X19, #48]
+
+        ADDI X9, XZR, #3
+        STUR X9, [X19, #56]
+
+        ADDI X9, XZR, #2
+        STUR X9, [X19, #64]
+
+        ADDI X9, XZR, #1
+        STUR X9, [X19, #72]
+
+        BR LR
+    selectionSort:
+        ADD X21, XZR, XZR
+        ADD X24, LR, XZR
+
+        B selectionSortLoop
+        selectionSortLoop:
+            SUBS XZR, X21, X20
+            B.GE finishSort
+            //SUB X9, X20, X21
+            //CBZ X9, finishSort
+
+            BL findSmallest
+            BL swap
+
+            ADDI X21, X21, #1
+
+            B selectionSortLoop
+        finishSort:
+            ADD LR, X24, XZR
+            BR LR
+    findSmallest:
+        ADD X22, X21, XZR             //assigning X22 to our current index of selectionSort
+        ADD X23, X21, XZR
+
+        B loopSmallest              //start loop
+        loopSmallest:               
+            SUB X9, X20, X22
+            CBZ X9, finishSmallest          //branch if we finish the loop
+
+            LSL X10, X22, #3
+            LSL X11, X23, #3
+            ADD X10, X10, X19       //&array[currentIndex]
+            ADD X11, X11, X19       //&array[currentSmallest]
+
+            LDUR X12, [X10, #0]     //Load in the values from the array
+            LDUR X13, [X11, #0]     //Load in the values from the array
+
+            SUBS XZR, X12, X13
+            B.GE noNewSmallest
+            
+            ADD X23, X22, XZR
+
+            noNewSmallest:
+                ADDI X22, X22, #1
+                B loopSmallest          //loop until finished
+        finishSmallest:
+            BR LR
+    swap:
+        LSL X9, X21, #3
+        LSL X10, X23, #3
+        ADD X9, X9, X19         //X9 = Array @ index X21
+        ADD X10, X10, X19       //X10 = Array @ index X23
+
+        LDUR X11, [X9, #0]      //X11 = array @ X9
+        LDUR X12, [X10, #0]     //X12 = array @ x10
+
+        STUR X12, [X9, #0]      //X9 = X10
+        STUR X11, [X10, #0]     //X10 = X9
+        
+        BR LR
+end:
