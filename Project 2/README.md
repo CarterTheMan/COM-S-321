@@ -6,6 +6,7 @@ Except that it ignores the PC and flow control, a disassembler essentially imple
 
 Your disassembler should fully support the following set of LEGv8 instructions:
 
+```
 ADD
 ADDI
 AND
@@ -47,7 +48,7 @@ PRNT: This is an added instruction (part of our emulator, but not part of LEG or
 PRNL: This is an added instruction that prints a blank line.  This is an R instruction.  The opcode is 11111111100.
 DUMP: This is an added instruction that displays the contents of all registers and memory, as well as the disassembled program.  This is an R instruction.  The opcode is 11111111110.
 HALT: This is an added instruction that triggers a DUMP and terminates the emulator.  This is an R instruction.  The opcode is 11111111111
-
+```
 
 
 How to Execute:
