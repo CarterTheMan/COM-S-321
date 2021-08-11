@@ -15,11 +15,11 @@ lecture and the textbook):
   manipulation--so we are requiring that you do it this way.
 
   Pseudocode for the selection sort:
-
+```
     SelectionSort(array)
       for each element in array in order from first to last:
         swap element with smallest element in the subarray that it begins
-
+```
 * Implement a procedure to fill an array with consecutive 8-byte integers in
   reverse-sorted (high to low) order
 * Implement a "main" procedure that ties all of this together by:
